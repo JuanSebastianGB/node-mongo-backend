@@ -15,5 +15,12 @@ const validatorCreateItem = [
   check('mediaId').exists().notEmpty(),
   (req, res, next) => validateResults(req, res, next),
 ];
+const validatorGetItem = [
+  check('id').exists().notEmpty(),
+  (req, res, next) => validateResults(req, res, next),
+];
 
-module.exports = { validatorCreateItem };
+module.exports = {
+  validatorCreateItem,
+  validatorGetItem,
+};

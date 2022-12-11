@@ -1,20 +1,49 @@
+const { matchedData } = require('express-validator');
 const { tracksModel } = require('../models');
-const usersModel = require('../models/nosql/users.model');
+const { handleHttpError } = require('../utilities/handleError');
 
 const getItems = async (req, res) => {
-  const data = await tracksModel.find({});
-  res.send({ data });
+  try {
+    const data = await tracksModel.find({});
+    res.send({ data });
+  } catch (error) {
+    handleHttpError(res, 'ERROR_GET_ITEMS');
+  }
 };
-const getItem = (req, res) => {};
+const getItem = async (req, res) => {
+  try {
+    const { id } = matchedData(req);
+    const data = await tracksModel.findById(id);
+    res.json(data);
+  } catch (error) {
+    handleHttpError(res, 'ERROR_GET_ITEM');
+  }
+};
 const createItem = async (req, res) => {
-  const { body } = req;
+  const body = matchedData(req);
   try {
     const data = await tracksModel.create(body);
     return res.json(data);
   } catch (error) {
-    return res.json(error);
+    handleHttpError(res, 'ERROR_CREATE_ITEMS');
   }
 };
-const updateItem = (req, res) => {};
-const deleteItem = (req, res) => {};
+const updateItem = async (req, res) => {
+  try {
+    const { id, ...body } = matchedData(req);
+    const data = await tracksModel.findOneAndUpdate(id, body);
+    return res.json(data);
+  } catch (error) {
+    handleHttpError(res, 'ERROR_UPDATE_ITEMS');
+  }
+};
+const deleteItem = async (req, res) => {
+  try {
+    const { id } = matchedData(req);
+    const data = await tracksModel.deleteOne({ _id: id });
+    return res.json(data);
+  } catch (error) {
+    handleHttpError(res, 'ERROR_DELETE_ITEMS');
+  }
+};
 module.exports = { getItem, getItems, createItem, updateItem, deleteItem };
