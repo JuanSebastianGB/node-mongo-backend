@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const SCHEMA_NAME = require('./modelsNames');
+const mongooseDelete = require('mongoose-delete');
 
 const coverValidation = {
   validator: (req) => true,
@@ -26,5 +27,6 @@ const properties = {
 };
 const schemaConfig = { timestamps: true, versionKey: false };
 const tracksSchema = new mongoose.Schema(properties, schemaConfig);
+tracksSchema.plugin(mongooseDelete, { overrideMethods: 'all' });
 
 module.exports = mongoose.model(SCHEMA_NAME.TRACKS, tracksSchema);
