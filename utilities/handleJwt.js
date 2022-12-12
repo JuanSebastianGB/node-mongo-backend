@@ -1,5 +1,4 @@
 const jwt = require('jsonwebtoken');
-const { isJSDocUnknownTag } = require('typescript');
 
 /**
  * This function takes a user object and returns a token.
